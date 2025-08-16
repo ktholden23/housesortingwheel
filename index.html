@@ -166,14 +166,14 @@
     removeFlash();
     const index = segments.indexOf(selected);
     const slice = 360 / segments.length;
-    const spins = Math.floor(Math.random() * 2) + 4; // always 4-5 spins
+    const spins = Math.floor(Math.random() * 2) + 4;
     const landing = index * slice + slice / 2;
     const targetAngle = spins * 360 + (360 - landing);
     currentAngle += targetAngle;
     document.getElementById("wheel").style.transform = `rotate(${currentAngle}deg)`;
     setTimeout(() => {
       flashSegment(selected.elementId);
-      displayResult(`You have been chosen for House <b><u>${selected.name}</u></b>!`, selected.color);
+      displayResult(`You have been chosen for House <b><u><span style="font-size:72px;">${selected.name}</span></u></b>!`, selected.color);
       updateCounterDisplay();
     }, 4000);
   }
