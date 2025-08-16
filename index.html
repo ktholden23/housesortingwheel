@@ -15,7 +15,6 @@
       height: 100vh;
       margin: 0;
       background-color: #d3d3d3;
-      overflow: hidden;
     }
 
     .result-message {
@@ -149,22 +148,6 @@
       padding: 10px;
       font-size: 16px;
     }
-
-    .confetti {
-      position: fixed;
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      z-index: 9999;
-      animation: fall 3s linear infinite;
-    }
-
-    @keyframes fall {
-      to {
-        transform: translateY(100vh) rotate(360deg);
-        opacity: 0;
-      }
-    }
   </style>
 </head>
 <body>
@@ -225,7 +208,6 @@
       flashSegment(selected.elementId);
       displayResult(`You have been chosen for House <b><u><span style="font-size:72px;">${selected.name}</span></u></b>!`, selected.color);
       updateCounterDisplay();
-      launchConfetti(selected.color);
     }, 4000);
   }
 
@@ -269,19 +251,6 @@
   function showCustomAlert(text) {
     document.getElementById("customAlertText").innerText = text;
     document.getElementById("customAlert").style.display = "block";
-  }
-
-  function launchConfetti(color) {
-    for (let i = 0; i < 80; i++) {
-      const confetti = document.createElement('div');
-      confetti.classList.add('confetti');
-      confetti.style.left = `${Math.random() * 100}vw`;
-      confetti.style.top = `${-10 + Math.random() * 20}px`;
-      confetti.style.backgroundColor = color;
-      confetti.style.animationDuration = `${2 + Math.random() * 2}s`;
-      document.body.appendChild(confetti);
-      setTimeout(() => confetti.remove(), 4000);
-    }
   }
 
   updateCounterDisplay();
