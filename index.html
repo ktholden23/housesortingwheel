@@ -187,30 +187,32 @@
   let currentRotation = 0;
 
   function spinWheel() {
-    const available = segments.filter(s => s.count < s.limit);
-    if (available.length === 0) return showCustomAlert("All houses have reached their limit!");
+  const available = segments.filter(s => s.count < s.limit);
+  if (available.length === 0) return showCustomAlert("All houses have reached their limit!");
 
-    const selected = available[Math.floor(Math.random() * available.length)];
-    selected.count++;
+  const selected = available[Math.floor(Math.random() * available.length)];
+  selected.count++;
 
-    removeFlash();
+  removeFlash();
 
-    const index = segments.indexOf(selected);
-    const sliceAngle = 360 / segments.length;
-    const offsetToTop = sliceAngle / 2;
-    const landingAngle = index * sliceAngle + offsetToTop;
-    const extraSpins = Math.floor(Math.random() * 2) + 4;
-    const targetRotation = extraSpins * 360 + (360 - landingAngle);
+  const index = segments.indexOf(selected);
+  const sliceAngle = 360 / segments.length;
+  const angleToTop = 270; // pointer is at 270deg
+  const selectedAngle = index * sliceAngle + sliceAngle / 2;
 
-    currentRotation += targetRotation;
-    document.getElementById("wheel").style.transform = `rotate(${currentRotation}deg)`;
+  const spins = Math.floor(Math.random() * 2) + 4;
+  const totalRotation = spins * 360 + (angleToTop - (currentRotation % 360) - selectedAngle);
 
-    setTimeout(() => {
-      flashSegment(selected.elementId);
-      displayResult(`You have been chosen for House <b><u><span style="font-size:72px;">${selected.name}</span></u></b>!`, selected.color);
-      updateCounterDisplay();
-    }, 4000);
-  }
+  currentRotation += totalRotation;
+
+  document.getElementById("wheel").style.transform = `rotate(${currentRotation}deg)`;
+
+  setTimeout(() => {
+    flashSegment(selected.elementId);
+    displayResult(`You have been chosen for House <b><u><span style="font-size:72px;">${selected.name}</span></u></b>!`, selected.color);
+    updateCounterDisplay();
+  }, 4000);
+}
 
   function flashSegment(id) {
     const el = document.getElementById(id).querySelector('img');
