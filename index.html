@@ -43,15 +43,15 @@
 
     .pointer {
       position: absolute;
-      top: -25px;
+      top: -50px;
       left: 50%;
       transform: translateX(-50%);
       width: 0;
       height: 0;
       border-left: 20px solid transparent;
       border-right: 20px solid transparent;
-      border-bottom: 30px solid black;
-      z-index: 999;
+      border-bottom: 40px solid black;
+      z-index: 1000;
     }
 
     .wheel {
@@ -184,7 +184,7 @@
     { name: "Reveur", elementId: "segment1", count: 0, limit: 1, color: "#00008B" }
   ];
 
-  let currentAngle = 0;
+  let currentRotation = 0;
 
   function spinWheel() {
     const available = segments.filter(s => s.count < s.limit);
@@ -196,13 +196,13 @@
     removeFlash();
 
     const index = segments.indexOf(selected);
-    const slice = 360 / segments.length;
-    const spins = Math.floor(Math.random() * 2) + 4;
-    const landing = index * slice;
-    const targetAngle = spins * 360 + (360 - landing);
+    const sliceAngle = 360 / segments.length;
+    const extraSpins = Math.floor(Math.random() * 2) + 4;
+    const targetRotation = (extraSpins * 360) + (360 - (index * sliceAngle + sliceAngle / 2));
 
-    currentAngle += targetAngle;
-    document.getElementById("wheel").style.transform = `rotate(${currentAngle}deg)`;
+    currentRotation += targetRotation;
+
+    document.getElementById("wheel").style.transform = `rotate(${currentRotation}deg)`;
 
     setTimeout(() => {
       flashSegment(selected.elementId);
