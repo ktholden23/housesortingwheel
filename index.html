@@ -18,10 +18,11 @@
     }
 
     .result-message {
-      font-size: 48px;
+      font-size: 60px;
       font-weight: bold;
       color: #333;
       margin-bottom: 20px;
+      text-align: center;
     }
 
     .wheel-wrapper {
@@ -173,7 +174,7 @@
 
     const index = segments.indexOf(selected);
     const slice = 360 / segments.length;
-    const offset = slice / 2;
+    const offset = 0; // changed to align the segment start at pointer
     const extraSpins = 3 + Math.floor(Math.random() * 2);
     const angle = (index * slice + offset) % 360;
     const target = extraSpins * 360 + (360 - angle);
