@@ -225,9 +225,11 @@
 
         removeFlash();
 
-        const segmentAngle = selectedSegment.angle;
-        const spins = Math.floor(Math.random() * 3) + 3;
-        const targetAngle = spins * 360 + (360 - segmentAngle);
+        const segmentIndex = segments.indexOf(selectedSegment);
+        const degreesPerSegment = 360 / segments.length;
+        const randomFullSpins = Math.floor(Math.random() * 3) + 3;
+        const landingAngle = segmentIndex * degreesPerSegment;
+        const targetAngle = randomFullSpins * 360 + (360 - landingAngle);
 
         currentAngle += targetAngle;
 
