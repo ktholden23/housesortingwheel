@@ -4,10 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HES Houses</title>
-    
-    <!-- Google Fonts -->
+
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap" rel="stylesheet">
-    
     <style>
         body {
             font-family: 'Cinzel', serif;
@@ -17,7 +15,7 @@
             align-items: center;
             height: 100vh;
             margin: 0;
-            background-color: #d3d3d3; /* Light to medium gray background */
+            background-color: #d3d3d3;
         }
 
         .result-message {
@@ -77,26 +75,6 @@
             opacity: 0.3;
         }
 
-        .wheel-segment:nth-child(1) {
-            transform: rotate(0deg);
-            background-color: #00008B; /* Darker Blue */
-        }
-
-        .wheel-segment:nth-child(2) {
-            transform: rotate(90deg);
-            background-color: #000000; /* Black */
-        }
-
-        .wheel-segment:nth-child(3) {
-            transform: rotate(180deg);
-            background-color: #B22222; /* Brighter Red */
-        }
-
-        .wheel-segment:nth-child(4) {
-            transform: rotate(270deg);
-            background-color: #008000; /* Green */
-        }
-
         .pointer {
             width: 0;
             height: 0;
@@ -117,21 +95,10 @@
             min-width: 250px;
         }
 
-        .reveur-counter {
-            color: #00008B; /* Darker Blue */
-        }
-
-        .altruismo-counter {
-            color: #000000; /* Black */
-        }
-
-        .amistad-counter {
-            color: #B22222; /* Brighter Red */
-        }
-
-        .isibindi-counter {
-            color: #008000; /* Green */
-        }
+        .reveur-counter { color: #00008B; }
+        .altruismo-counter { color: #000000; }
+        .amistad-counter { color: #B22222; }
+        .isibindi-counter { color: #008000; }
 
         .button-container button {
             font-size: 28px;
@@ -154,6 +121,26 @@
         .button-container button:active {
             transform: scale(0.95);
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        #customAlert {
+            display: none;
+            position: fixed;
+            top: 30%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            border: 2px solid black;
+            padding: 20px;
+            z-index: 9999;
+            text-align: center;
+            font-size: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        #customAlert button {
+            margin-top: 15px;
+            padding: 10px;
+            font-size: 16px;
         }
     </style>
 </head>
@@ -187,12 +174,18 @@
     <button onclick="spinWheel()">Spin</button>
 </div>
 
+<!-- Custom alert popup -->
+<div id="customAlert">
+    <p id="customAlertText"></p>
+    <button onclick="closeCustomAlert()">OK</button>
+</div>
+
 <script>
     const segments = [
-        { name: "Altruismo", elementId: "segment2", count: 0, limit: 57, angle: 90, color: "#000000" }, // Black
-        { name: "Amistad", elementId: "segment3", count: 0, limit: 57, angle: 180, color: "#B22222" }, // Brighter Red
-        { name: "Isibindi", elementId: "segment4", count: 0, limit: 57, angle: 270, color: "#008000" }, // Green
-        { name: "Reveur", elementId: "segment1", count: 0, limit: 57, angle: 0, color: "#00008B" }, // Darker Blue
+        { name: "Altruismo", elementId: "segment2", count: 0, limit: 1, angle: 90, color: "#000000" },
+        { name: "Amistad", elementId: "segment3", count: 0, limit: 1, angle: 180, color: "#B22222" },
+        { name: "Isibindi", elementId: "segment4", count: 0, limit: 1, angle: 270, color: "#008000" },
+        { name: "Reveur", elementId: "segment1", count: 0, limit: 1, angle: 0, color: "#00008B" },
     ];
 
     let currentAngle = 0;
@@ -201,7 +194,7 @@
         let availableSegments = segments.filter(segment => segment.count < segment.limit);
 
         if (availableSegments.length === 0) {
-            alert("All categories have reached their limit!");
+            showCustomAlert("All houses have reached their limit!");
             return;
         }
 
@@ -262,6 +255,15 @@
         });
         counterText += `<br>Total: ${total}`;
         counterDisplay.innerHTML = counterText;
+    }
+
+    function showCustomAlert(text) {
+        document.getElementById("customAlertText").innerText = text;
+        document.getElementById("customAlert").style.display = "block";
+    }
+
+    function closeCustomAlert() {
+        document.getElementById("customAlert").style.display = "none";
     }
 
     updateCounterDisplay();
