@@ -197,10 +197,12 @@
 
     const index = segments.indexOf(selected);
     const sliceAngle = 360 / segments.length;
+    const angleToTop = 270; // top is at 270deg in our layout
+    const targetAngle = index * sliceAngle + sliceAngle / 2;
     const extraSpins = Math.floor(Math.random() * 2) + 4;
-    const targetRotation = (extraSpins * 360) + (360 - (index * sliceAngle + sliceAngle / 2));
+    const finalRotation = extraSpins * 360 + (angleToTop - targetAngle);
 
-    currentRotation += targetRotation;
+    currentRotation += finalRotation;
 
     document.getElementById("wheel").style.transform = `rotate(${currentRotation}deg)`;
 
