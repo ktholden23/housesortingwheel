@@ -1,266 +1,291 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>HES Houses</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap" rel="stylesheet" />
-  <style>
-    body {
-      font-family: 'Cinzel', serif;
-      background-color: #d3d3d3;
-      margin: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HES Houses</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Cinzel', serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #d3d3d3;
+        }
 
-    .result-message {
-      text-align: center;
-      font-size: 40px;
-      font-weight: bold;
-      margin: 20px;
-    }
+        .result-message {
+            text-align: center;
+            font-size: 40px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #333;
+        }
 
-    .container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
+        .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 800px;
+        }
 
-    .wheel-container {
-      position: relative;
-      width: 400px;
-      height: 400px;
-    }
+        .wheel-container {
+            position: relative;
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 5px solid #333;
+        }
 
-    canvas {
-      width: 100%;
-      height: 100%;
-    }
+        .wheel {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            position: relative;
+            transition: transform 4s ease-out;
+        }
 
-    .pointer {
-      position: absolute;
-      right: -30px;
-      top: 50%;
-      transform: translateY(-50%) rotate(90deg);
-      width: 0;
-      height: 0;
-      border-top: 20px solid transparent;
-      border-bottom: 20px solid transparent;
-      border-left: 30px solid black;
-      z-index: 2;
-    }
+        .wheel-segment {
+            width: 50%;
+            height: 50%;
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform-origin: 0% 100%;
+            overflow: hidden;
+        }
 
-    .counter {
-      margin-left: 30px;
-      font-size: 24px;
-      font-weight: bold;
-      min-width: 200px;
-    }
+        .wheel-segment img {
+            position: absolute;
+            width: 150%;
+            height: 150%;
+            object-fit: contain;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(45deg);
+            transition: opacity 0.3s ease-in-out;
+        }
 
-    .button-container {
-      margin: 20px;
-    }
+        .wheel-segment img.flash {
+            opacity: 0.3;
+        }
 
-    .button-container button {
-      font-size: 24px;
-      padding: 15px 30px;
-      cursor: pointer;
-      background-color: black;
-      color: white;
-      border: none;
-      border-radius: 10px;
-      font-family: 'Cinzel', serif;
-    }
+        .wheel-segment:nth-child(1) {
+            transform: rotate(0deg);
+            background-color: #00008B;
+        }
 
-    #customAlert {
-      display: none;
-      position: fixed;
-      top: 30%;
-      left: 50%;
-      transform: translateX(-50%);
-      background: white;
-      border: 2px solid black;
-      padding: 20px;
-      z-index: 9999;
-      text-align: center;
-      font-size: 20px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-    }
+        .wheel-segment:nth-child(2) {
+            transform: rotate(90deg);
+            background-color: #000000;
+        }
 
-    #customAlert button {
-      margin-top: 15px;
-      padding: 10px;
-      font-size: 16px;
-    }
-  </style>
+        .wheel-segment:nth-child(3) {
+            transform: rotate(180deg);
+            background-color: #B22222;
+        }
+
+        .wheel-segment:nth-child(4) {
+            transform: rotate(270deg);
+            background-color: #008000;
+        }
+
+        .pointer {
+            width: 0;
+            height: 0;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-bottom: 40px solid black;
+            position: absolute;
+            top: -40px;
+            left: calc(50% - 20px);
+            z-index: 10;
+        }
+
+        .counter {
+            font-size: 32px;
+            font-weight: bold;
+            text-align: left;
+            margin-left: 30px;
+            min-width: 250px;
+        }
+
+        .reveur-counter { color: #00008B; }
+        .altruismo-counter { color: #000000; }
+        .amistad-counter { color: #B22222; }
+        .isibindi-counter { color: #008000; }
+
+        .button-container button {
+            font-size: 28px;
+            padding: 20px 40px;
+            cursor: pointer;
+            background-color: black;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-family: 'Cinzel', serif;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .button-container button:hover {
+            background-color: #444;
+        }
+
+        .button-container button:active {
+            transform: scale(0.95);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        #customAlert {
+            display: none;
+            position: fixed;
+            top: 30%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            border: 2px solid black;
+            padding: 20px;
+            z-index: 9999;
+            text-align: center;
+            font-size: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        #customAlert button {
+            margin-top: 15px;
+            padding: 10px;
+            font-size: 16px;
+        }
+    </style>
 </head>
 <body>
-  <div class="result-message" id="resultMessage"></div>
 
-  <div class="container">
+<div class="result-message" id="resultMessage"></div>
+
+<div class="container">
     <div class="wheel-container">
-      <canvas id="wheelCanvas" width="400" height="400"></canvas>
-      <div class="pointer"></div>
+        <div class="pointer"></div>
+        <div class="wheel" id="wheel">
+            <div class="wheel-segment" id="segment1">
+                <img src="reveurlogo.jpg" alt="Reveur">
+            </div>
+            <div class="wheel-segment" id="segment2">
+                <img src="altruismologo.jpg" alt="Altruismo">
+            </div>
+            <div class="wheel-segment" id="segment3">
+                <img src="amistadlogo.jpg" alt="Amistad">
+            </div>
+            <div class="wheel-segment" id="segment4">
+                <img src="isibindilogo.jpg" alt="Isibindi">
+            </div>
+        </div>
     </div>
+
     <div class="counter" id="counterDisplay"></div>
-  </div>
+</div>
 
-  <div class="button-container">
+<div class="button-container">
     <button onclick="spinWheel()">Spin</button>
-  </div>
+</div>
 
-  <div id="customAlert">
+<div id="customAlert">
     <p id="customAlertText"></p>
-    <button onclick="closeCustomAlert()">OK</button>
-  </div>
+    <button onclick="document.getElementById('customAlert').style.display='none';">OK</button>
+</div>
 
-  <script>
-    const wheelCanvas = document.getElementById("wheelCanvas");
-    const ctx = wheelCanvas.getContext("2d");
-    const centerX = wheelCanvas.width / 2;
-    const centerY = wheelCanvas.height / 2;
-    const radius = wheelCanvas.width / 2;
-
+<script>
     const segments = [
-      {
-        name: "Reveur",
-        color: "#00008B",
-        count: 0,
-        limit: 57,
-        image: "reveurlogo.jpg",
-      },
-      {
-        name: "Altruismo",
-        color: "#000000",
-        count: 0,
-        limit: 57,
-        image: "altruismologo.jpg",
-      },
-      {
-        name: "Amistad",
-        color: "#B22222",
-        count: 0,
-        limit: 57,
-        image: "amistadlogo.jpg",
-      },
-      {
-        name: "Isibindi",
-        color: "#008000",
-        count: 0,
-        limit: 57,
-        image: "isibindilogo.jpg",
-      },
+        { name: "Altruismo", elementId: "segment2", count: 0, limit: 1, angle: 90, color: "#000000" },
+        { name: "Amistad", elementId: "segment3", count: 0, limit: 1, angle: 180, color: "#B22222" },
+        { name: "Isibindi", elementId: "segment4", count: 0, limit: 1, angle: 270, color: "#008000" },
+        { name: "Reveur", elementId: "segment1", count: 0, limit: 1, angle: 0, color: "#00008B" },
     ];
 
     let currentAngle = 0;
 
-    function drawWheel() {
-      ctx.clearRect(0, 0, wheelCanvas.width, wheelCanvas.height);
-      const anglePerSegment = (2 * Math.PI) / segments.length;
+    function spinWheel() {
+        let availableSegments = segments.filter(segment => segment.count < segment.limit);
 
-      segments.forEach((segment, i) => {
-        const startAngle = currentAngle + i * anglePerSegment;
-        const endAngle = startAngle + anglePerSegment;
+        if (availableSegments.length === 0) {
+            showCustomAlert("All houses have reached their limit!");
+            return;
+        }
 
-        ctx.beginPath();
-        ctx.moveTo(centerX, centerY);
-        ctx.arc(centerX, centerY, radius, startAngle, endAngle);
-        ctx.fillStyle = segment.color;
-        ctx.fill();
-        ctx.save();
+        let selectedSegment = availableSegments[Math.floor(Math.random() * availableSegments.length)];
+        selectedSegment.count += 1;
 
-        // Text
-        ctx.translate(centerX, centerY);
-        ctx.rotate(startAngle + anglePerSegment / 2);
-        ctx.textAlign = "right";
-        ctx.fillStyle = "white";
-        ctx.font = "bold 16px Cinzel";
-        ctx.fillText(segment.name, radius - 10, 5);
+        removeFlash();
 
-        ctx.restore();
+        const segmentAngle = selectedSegment.angle;
+        const spins = Math.floor(Math.random() * 3) + 3;
+        const targetAngle = spins * 360 + (360 - segmentAngle);
 
-        // Optional: draw logo
-        const img = new Image();
-        img.src = segment.image;
-        img.onload = () => {
-          const imgAngle = startAngle + anglePerSegment / 2;
-          const imgX = centerX + (radius / 2) * Math.cos(imgAngle) - 20;
-          const imgY = centerY + (radius / 2) * Math.sin(imgAngle) - 20;
-          ctx.drawImage(img, imgX, imgY, 40, 40);
-        };
-      });
+        currentAngle += targetAngle;
+
+        document.getElementById("wheel").style.transform = `rotate(${currentAngle}deg)`;
+
+        setTimeout(() => {
+            flashSegment(selectedSegment.elementId);
+            displayResult(`You have been chosen for House <b><u>${selectedSegment.name}</u></b>!`, selectedSegment.color);
+            updateCounterDisplay();
+        }, 4000);
     }
 
-    function spinWheel() {
-      const available = segments.filter(s => s.count < s.limit);
-      if (available.length === 0) {
-        showCustomAlert("All houses have reached their limit!");
-        return;
-      }
+    function flashSegment(elementId) {
+        const element = document.getElementById(elementId).querySelector('img');
+        let flashCount = 0;
+        const flashInterval = setInterval(() => {
+            element.classList.toggle('flash');
+            flashCount++;
+            if (flashCount > 5) {
+                clearInterval(flashInterval);
+                element.classList.remove('flash');
+            }
+        }, 300);
+    }
 
-      const selected = available[Math.floor(Math.random() * available.length)];
-      selected.count++;
-
-      const selectedIndex = segments.indexOf(selected);
-      const anglePerSegment = 360 / segments.length;
-      const stopAngle = 360 - selectedIndex * anglePerSegment - anglePerSegment / 2;
-      const spins = Math.floor(Math.random() * 3) + 4;
-      const totalRotation = spins * 360 + stopAngle;
-
-      let rotation = 0;
-      const duration = 4000;
-      const frameRate = 1000 / 60;
-      const totalFrames = duration / frameRate;
-      let frame = 0;
-
-      const animate = setInterval(() => {
-        frame++;
-        const progress = frame / totalFrames;
-        const easeOut = 1 - Math.pow(1 - progress, 4);
-        const angle = currentAngle + easeOut * (totalRotation - currentAngle);
-
-        currentAngle = angle;
-        drawWheel();
-
-        if (frame >= totalFrames) {
-          clearInterval(animate);
-          displayResult(`You have been chosen for House <b><u>${selected.name}</u></b>!`, selected.color);
-          updateCounterDisplay();
-        }
-      }, frameRate);
+    function removeFlash() {
+        segments.forEach(segment => {
+            const element = document.getElementById(segment.elementId).querySelector('img');
+            element.classList.remove('flash');
+        });
     }
 
     function displayResult(message, color) {
-      const msg = document.getElementById("resultMessage");
-      msg.innerHTML = message;
-      msg.style.color = color;
+        const resultMessage = document.getElementById("resultMessage");
+        resultMessage.innerHTML = message;
+        resultMessage.style.color = color;
+        resultMessage.style.display = "block";
     }
 
     function updateCounterDisplay() {
-      const div = document.getElementById("counterDisplay");
-      let html = "";
-      let total = 0;
-      segments.forEach(s => {
-        html += `${s.name}: ${s.count}<br>`;
-        total += s.count;
-      });
-      html += `<br><b>Total:</b> ${total}`;
-      div.innerHTML = html;
+        const counterDisplay = document.getElementById("counterDisplay");
+        let counterText = "";
+        let total = 0;
+        segments.forEach(segment => {
+            counterText += `<span class="${segment.name.toLowerCase()}-counter">${segment.name}: ${segment.count}</span><br>`;
+            total += segment.count;
+        });
+        counterText += `<br>Total: ${total}`;
+        counterDisplay.innerHTML = counterText;
     }
 
     function showCustomAlert(text) {
-      document.getElementById("customAlertText").innerText = text;
-      document.getElementById("customAlert").style.display = "block";
+        document.getElementById("customAlertText").innerText = text;
+        document.getElementById("customAlert").style.display = "block";
     }
 
-    function closeCustomAlert() {
-      document.getElementById("customAlert").style.display = "none";
-    }
-
-    drawWheel();
     updateCounterDisplay();
-  </script>
+</script>
+
 </body>
 </html>
