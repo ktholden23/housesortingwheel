@@ -4,46 +4,35 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>HES Houses</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap" rel="stylesheet">
   <style>
     body {
       font-family: 'Cinzel', serif;
       display: flex;
       flex-direction: column;
-      justify-content: center;
       align-items: center;
-      height: 100vh;
-      margin: 0;
       background-color: #d3d3d3;
+      margin: 0;
+      height: 100vh;
+      justify-content: center;
     }
 
     .result-message {
-      text-align: center;
-      font-size: 60px;
+      font-size: 48px;
       font-weight: bold;
-      margin-bottom: 20px;
       color: #333;
+      margin-bottom: 20px;
     }
 
-    .container {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      width: 800px;
-    }
-
-    .wheel-container {
+    .wheel-wrapper {
       position: relative;
       width: 400px;
       height: 400px;
-      border-radius: 50%;
-      overflow: hidden;
-      border: 5px solid #333;
     }
 
     .pointer {
       position: absolute;
-      top: -50px;
+      top: -40px;
       left: 50%;
       transform: translateX(-50%);
       width: 0;
@@ -58,14 +47,16 @@
       width: 100%;
       height: 100%;
       border-radius: 50%;
+      border: 5px solid #333;
+      overflow: hidden;
       position: relative;
       transition: transform 4s ease-out;
     }
 
     .wheel-segment {
+      position: absolute;
       width: 50%;
       height: 50%;
-      position: absolute;
       top: 0;
       left: 50%;
       transform-origin: 0% 100%;
@@ -74,13 +65,12 @@
 
     .wheel-segment img {
       position: absolute;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      top: 0;
-      left: 0;
-      transform: rotate(45deg);
-      transition: opacity 0.3s ease-in-out;
+      width: 140%;
+      height: 140%;
+      object-fit: contain;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(45deg);
     }
 
     .wheel-segment img.flash {
@@ -92,40 +82,19 @@
     .wheel-segment:nth-child(3) { transform: rotate(180deg); background-color: #B22222; }
     .wheel-segment:nth-child(4) { transform: rotate(270deg); background-color: #008000; }
 
-    .counter {
-      font-size: 32px;
-      font-weight: bold;
-      text-align: left;
-      margin-left: 30px;
-      min-width: 250px;
+    .button-container {
+      margin-top: 30px;
     }
 
-    .reveur-counter { color: #00008B; }
-    .altruismo-counter { color: #000000; }
-    .amistad-counter { color: #B22222; }
-    .isibindi-counter { color: #008000; }
-
-    .button-container button {
-      font-size: 28px;
-      padding: 20px 40px;
-      cursor: pointer;
+    button {
+      font-size: 24px;
+      padding: 15px 30px;
       background-color: black;
       color: white;
       border: none;
       border-radius: 10px;
       font-family: 'Cinzel', serif;
-      font-weight: bold;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-      transition: all 0.3s ease;
-    }
-
-    .button-container button:hover {
-      background-color: #444;
-    }
-
-    .button-container button:active {
-      transform: scale(0.95);
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+      cursor: pointer;
     }
 
     #customAlert {
@@ -140,7 +109,6 @@
       z-index: 9999;
       text-align: center;
       font-size: 20px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
     }
 
     #customAlert button {
@@ -154,17 +122,22 @@
 
 <div class="result-message" id="resultMessage"></div>
 
-<div class="container">
-  <div class="wheel-container">
-    <div class="pointer"></div>
-    <div class="wheel" id="wheel">
-      <div class="wheel-segment" id="segment1"><img src="reveurlogo.jpg" alt="Reveur"></div>
-      <div class="wheel-segment" id="segment2"><img src="altruismologo.jpg" alt="Altruismo"></div>
-      <div class="wheel-segment" id="segment3"><img src="amistadlogo.jpg" alt="Amistad"></div>
-      <div class="wheel-segment" id="segment4"><img src="isibindilogo.jpg" alt="Isibindi"></div>
+<div class="wheel-wrapper">
+  <div class="pointer"></div>
+  <div class="wheel" id="wheel">
+    <div class="wheel-segment" id="segment1">
+      <img src="reveurlogo.jpg" alt="Reveur" />
+    </div>
+    <div class="wheel-segment" id="segment2">
+      <img src="altruismologo.jpg" alt="Altruismo" />
+    </div>
+    <div class="wheel-segment" id="segment3">
+      <img src="amistadlogo.jpg" alt="Amistad" />
+    </div>
+    <div class="wheel-segment" id="segment4">
+      <img src="isibindilogo.jpg" alt="Isibindi" />
     </div>
   </div>
-  <div class="counter" id="counterDisplay"></div>
 </div>
 
 <div class="button-container">
@@ -181,14 +154,17 @@
     { name: "Altruismo", elementId: "segment2", count: 0, limit: 1, color: "#000000" },
     { name: "Amistad", elementId: "segment3", count: 0, limit: 1, color: "#B22222" },
     { name: "Isibindi", elementId: "segment4", count: 0, limit: 1, color: "#008000" },
-    { name: "Reveur", elementId: "segment1", count: 0, limit: 1, color: "#00008B" }
+    { name: "Reveur", elementId: "segment1", count: 0, limit: 1, color: "#00008B" },
   ];
 
   let currentRotation = 0;
 
   function spinWheel() {
     const available = segments.filter(s => s.count < s.limit);
-    if (available.length === 0) return showCustomAlert("All houses have reached their limit!");
+    if (available.length === 0) {
+      showCustomAlert("All houses have reached their limit!");
+      return;
+    }
 
     const selected = available[Math.floor(Math.random() * available.length)];
     selected.count++;
@@ -196,28 +172,29 @@
     removeFlash();
 
     const index = segments.indexOf(selected);
-    const sliceAngle = 360 / segments.length;
-    const extraSpins = Math.floor(Math.random() * 2) + 4;
-    const targetRotation = (extraSpins * 360) + (360 - (index * sliceAngle + sliceAngle / 2));
+    const slice = 360 / segments.length;
+    const offset = slice / 2;
+    const extraSpins = 3 + Math.floor(Math.random() * 2);
+    const angle = (index * slice + offset) % 360;
+    const target = extraSpins * 360 + (360 - angle);
 
-    currentRotation += targetRotation;
+    currentRotation += target;
 
     document.getElementById("wheel").style.transform = `rotate(${currentRotation}deg)`;
 
     setTimeout(() => {
       flashSegment(selected.elementId);
-      displayResult(`You have been chosen for House <b><u><span style="font-size:72px;">${selected.name}</span></u></b>!`, selected.color);
-      updateCounterDisplay();
+      displayResult(`You have been chosen for House <b><u><span style="font-size:64px">${selected.name}</span></u></b>!`, selected.color);
     }, 4000);
   }
 
   function flashSegment(id) {
     const el = document.getElementById(id).querySelector('img');
-    let flashes = 0;
-    const interval = setInterval(() => {
+    let flashCount = 0;
+    const flashInterval = setInterval(() => {
       el.classList.toggle('flash');
-      if (++flashes > 5) {
-        clearInterval(interval);
+      if (++flashCount > 5) {
+        clearInterval(flashInterval);
         el.classList.remove('flash');
       }
     }, 300);
@@ -233,27 +210,12 @@
     const el = document.getElementById("resultMessage");
     el.innerHTML = msg;
     el.style.color = color;
-    el.style.display = "block";
-  }
-
-  function updateCounterDisplay() {
-    const el = document.getElementById("counterDisplay");
-    let txt = "";
-    let total = 0;
-    segments.forEach(s => {
-      txt += `<span class="${s.name.toLowerCase()}-counter">${s.name}: ${s.count}</span><br>`;
-      total += s.count;
-    });
-    txt += `<br>Total: ${total}`;
-    el.innerHTML = txt;
   }
 
   function showCustomAlert(text) {
     document.getElementById("customAlertText").innerText = text;
     document.getElementById("customAlert").style.display = "block";
   }
-
-  updateCounterDisplay();
 </script>
 
 </body>
