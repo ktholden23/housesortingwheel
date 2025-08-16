@@ -39,19 +39,19 @@
       border-radius: 50%;
       overflow: hidden;
       border: 5px solid #333;
-      margin-top: 60px;
     }
 
     .pointer {
+      position: absolute;
+      top: -25px;
+      left: 50%;
+      transform: translateX(-50%);
       width: 0;
       height: 0;
       border-left: 20px solid transparent;
       border-right: 20px solid transparent;
-      border-top: 40px solid black; /* Points down to the wheel */
-      position: absolute;
-      top: -40px;
-      left: calc(50% - 20px);
-      z-index: 1000;
+      border-bottom: 30px solid black;
+      z-index: 999;
     }
 
     .wheel {
@@ -224,7 +224,9 @@
   }
 
   function removeFlash() {
-    segments.forEach(s => document.getElementById(s.elementId).querySelector('img').classList.remove('flash'));
+    segments.forEach(s => {
+      document.getElementById(s.elementId).querySelector('img').classList.remove('flash');
+    });
   }
 
   function displayResult(msg, color) {
